@@ -1,25 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { Dashboard } from './pages/Dashboard';
+import { Shows } from './pages/Shows';
+import { Radio, Podcast, Users, Settings } from 'lucide-react';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="flex min-h-screen bg-gray-50">
+        {/* Sidebar */}
+        <aside className="w-64 bg-slate-900 text-white">
+          <div className="p-6">
+            <h1 className="text-xl font-bold flex items-center gap-2">
+              <Radio className="text-blue-500" />
+              Cosmos FM Admin
+            </h1>
+          </div>
+          <nav className="px-4 space-y-2">
+            <NavLink to="/" icon={Radio} label="Дашборд" />
+            <NavLink to="/shows" icon={Radio} label="Передачи" />
+            <NavLink to="/podcasts" icon={Podcast} label="Подкасты" />
+            <NavLink to="/hosts" icon={Users} label="Ведущие" />
+            <NavLink to="/settings" icon={Settings} label="Настройки" />
+          </nav>
+        </aside>
+
+        {/* Main */}
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/shows" element={<Shows />} />
+            <Route path="/podcasts" element={<div className="p-8">Podcasts page (аналогично Shows)</div>} />
+            <Route path="/hosts" element={<div className="p-8">Hosts page (аналогично Shows)</div>} />
+            <Route path="/settings" element={<div className="p-8">Settings page</div>} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
+}
+
+function NavLink({ to, icon: Icon, label }: any) {
+  return (
+    <Link
+      to={to}
+      className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:bg-slate-800 hover:text-white transition-colors"
+    >
+      <Icon className="w-5 h-5" />
+      {label}
+    </Link>
   );
 }
 
