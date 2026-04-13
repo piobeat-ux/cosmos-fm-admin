@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { showsApi } from '../api/client';
-import { Plus, Pencil, Trash2, Radio } from 'lucide-react';
+import { Pencil, Trash2, Radio } from 'lucide-react';
 
 export function Shows() {
   const [shows, setShows] = useState([]);
@@ -43,7 +43,7 @@ export function Shows() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Удалить передачу?')) return;
+  if (!window.confirm('Удалить передачу?')) return;
     await showsApi.delete(id);
     loadShows();
   };
