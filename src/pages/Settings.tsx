@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { settingsApi } from '../api/client';
-import { Save, Globe, Mail, Phone, MapPin, MessageCircle, Instagram, Twitter, Youtube, Radio } from 'lucide-react';
+import { Save, Globe, Mail, Phone, MapPin, Radio } from 'lucide-react';
 
 export function Settings() {
   const [settings, setSettings] = useState({
@@ -11,11 +11,9 @@ export function Settings() {
     contactPhone: '',
     contactAddress: '',
     social: {
-      facebook: '',
-      instagram: '',
-      twitter: '',
-      youtube: '',
+      vk: '',
       telegram: '',
+      mave: '',
     },
     seo: {
       title: 'Cosmos FM — Радио отеля Cosmos',
@@ -35,7 +33,12 @@ export function Settings() {
     try {
       const { data } = await settingsApi.get();
       if (data && Object.keys(data).length > 0) {
-        setSettings(prev => ({ ...prev, ...data }));
+        setSettings(prev => ({
+          ...prev,
+          ...data,
+          social: { ...prev.social, ...(data.social || {}) },
+          seo: { ...prev.seo, ...(data.seo || {}) },
+        }));
       }
     } catch (error) {
       console.error('Ошибка загрузки настроек:', error);
@@ -193,57 +196,21 @@ export function Settings() {
 
         {/* Социальные сети */}
         <div className="bg-white rounded-xl shadow-sm border p-6">
-          <h2 className="text-xl font-bold mb-4">Социальные сети</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <h2 className="text-xl font-bold mb-4">Социальные сети и платформы</h2>
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                <MessageCircle className="w-4 h-4 inline mr-1 text-blue-600" /> Facebook / VK
+                🔵 ВКонтакте (VK)
               </label>
               <input
                 type="text"
-                value={settings.social?.facebook || ''}
-                onChange={e => updateSocial('facebook', e.target.value)}
-                placeholder="https://facebook.com/cosmosfm"
+                value={settings.social?.vk || ''}
+                onChange={e => updateSocial('vk', e.target.value)}
+                placeholder="https://vk.com/cosmosfm"
                 className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Instagram className="w-4 h-4 inline mr-1 text-pink-600" /> Instagram
-              </label>
-              <input
-                type="text"
-                value={settings.social?.instagram || ''}
-                onChange={e => updateSocial('instagram', e.target.value)}
-                placeholder="https://instagram.com/cosmosfm"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Twitter className="w-4 h-4 inline mr-1 text-sky-500" /> Twitter / X
-              </label>
-              <input
-                type="text"
-                value={settings.social?.twitter || ''}
-                onChange={e => updateSocial('twitter', e.target.value)}
-                placeholder="https://x.com/cosmosfm"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Youtube className="w-4 h-4 inline mr-1 text-red-600" /> YouTube
-              </label>
-              <input
-                type="text"
-                value={settings.social?.youtube || ''}
-                onChange={e => updateSocial('youtube', e.target.value)}
-                placeholder="https://youtube.com/@cosmosfm"
-                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 💬 Telegram
               </label>
@@ -252,6 +219,18 @@ export function Settings() {
                 value={settings.social?.telegram || ''}
                 onChange={e => updateSocial('telegram', e.target.value)}
                 placeholder="https://t.me/cosmosfm"
+                className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                🎧 Mave (MAXX)
+              </label>
+              <input
+                type="text"
+                value={settings.social?.mave || ''}
+                onChange={e => updateSocial('mave', e.target.value)}
+                placeholder="https://mave.digital/@cosmosfm"
                 className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
