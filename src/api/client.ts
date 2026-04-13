@@ -9,7 +9,7 @@ export const api = axios.create({
   },
 });
 
-// Shows
+// Shows API
 export const showsApi = {
   getAll: () => api.get('/shows'),
   getCurrent: () => api.get('/shows/current'),
@@ -18,7 +18,7 @@ export const showsApi = {
   delete: (id: string) => api.delete(`/shows/${id}`),
 };
 
-// Podcasts
+// Podcasts API
 export const podcastsApi = {
   getAll: () => api.get('/podcasts'),
   create: (data: any) => api.post('/podcasts', data),
@@ -26,7 +26,7 @@ export const podcastsApi = {
   delete: (id: string) => api.delete(`/podcasts/${id}`),
 };
 
-// Hosts
+// Hosts API
 export const hostsApi = {
   getAll: () => api.get('/hosts'),
   create: (data: any) => api.post('/hosts', data),
@@ -34,8 +34,22 @@ export const hostsApi = {
   delete: (id: string) => api.delete(`/hosts/${id}`),
 };
 
+// Pages API
+export const pagesApi = {
+  get: (page: string) => api.get(`/pages/${page}`),
+  update: (page: string, data: any) => api.put(`/pages/${page}`, data),
+};
+
+// Settings API
+export const settingsApi = {
+  get: () => api.get('/settings'),
+  update: (data: any) => api.put('/settings', data),
+};
+
 // Data export/import
 export const dataApi = {
   getAll: () => api.get('/data'),
   update: (data: any) => api.post('/data', data),
 };
+
+export default api;
