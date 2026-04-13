@@ -1,7 +1,10 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Dashboard } from './pages/Dashboard';
 import { Shows } from './pages/Shows';
-import { Radio, Podcast, Users, Settings } from 'lucide-react';
+import { Podcasts } from './pages/Podcasts';
+import { Hosts } from './pages/Hosts';
+import { Settings } from './pages/Settings';
+import { Radio, Podcast, Users, Settings as SettingsIcon } from 'lucide-react';
 
 function App() {
   return (
@@ -20,18 +23,18 @@ function App() {
             <NavLink to="/shows" icon={Radio} label="Передачи" />
             <NavLink to="/podcasts" icon={Podcast} label="Подкасты" />
             <NavLink to="/hosts" icon={Users} label="Ведущие" />
-            <NavLink to="/settings" icon={Settings} label="Настройки" />
+            <NavLink to="/settings" icon={SettingsIcon} label="Настройки" />
           </nav>
         </aside>
 
-        {/* Main */}
+        {/* Main content */}
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/shows" element={<Shows />} />
-            <Route path="/podcasts" element={<div className="p-8">Podcasts page (аналогично Shows)</div>} />
-            <Route path="/hosts" element={<div className="p-8">Hosts page (аналогично Shows)</div>} />
-            <Route path="/settings" element={<div className="p-8">Settings page</div>} />
+            <Route path="/podcasts" element={<Podcasts />} />
+            <Route path="/hosts" element={<Hosts />} />
+            <Route path="/settings" element={<Settings />} />
           </Routes>
         </main>
       </div>
@@ -39,7 +42,7 @@ function App() {
   );
 }
 
-function NavLink({ to, icon: Icon, label }: any) {
+function NavLink({ to, icon: Icon, label }: { to: string; icon: any; label: string }) {
   return (
     <Link
       to={to}
