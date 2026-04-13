@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react';
 import { showsApi } from '../api/client';
 import { Pencil, Trash2, Radio } from 'lucide-react';
 
+const dayLabels: Record<string, string> = {
+  monday: 'Пн',
+  tuesday: 'Вт',
+  wednesday: 'Ср',
+  thursday: 'Чт',
+  friday: 'Пт',
+  saturday: 'Сб',
+  sunday: 'Вс',
+};
+
+const allDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
 export function Shows() {
   const [shows, setShows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,10 +22,10 @@ export function Shows() {
     host: '',
     time: '',
     category: '',
-    dayOfWeek: [],
+    dayOfWeek: [] as string[],
     isLive: false,
   });
-  const [editingId, setEditingId] = useState(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
     loadShows();
@@ -38,12 +50,19 @@ export function Shows() {
   };
 
   const handleEdit = (show: any) => {
-    setForm(show);
+    setForm({
+      title: show.title || '',
+      host: show.host || '',
+      time: show.time || '',
+      category: show.category || '',
+      dayOfWeek: show.dayOfWeek || [],
+      isLive: show.isLive || false,
+    });
     setEditingId(show.id);
   };
 
   const handleDelete = async (id: string) => {
-  if (!window.confirm('Удалить передачу?')) return;
+    if (!window.confirm('Удалить передачу?')) return;
     await showsApi.delete(id);
     loadShows();
   };
@@ -93,6 +112,39 @@ export function Shows() {
             required
           />
         </div>
+
+        {/* Days of week */}
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Дни недели
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {allDays.map(day => (
+              <label key={day} className="flex items-center gap-1 px-3 py-2 border rounded-lg cursor-pointer hover:bg-gray-50">
+                <input
+                  type="checkbox"
+                  value={day}
+                  checked={form.dayOfWeek?.includes(day) || false}
+                  onChange={(e) => {
+                    const newDays = e.target.checked
+                      ? [...(form.dayOfWeek || []), day]
+                      : (form.dayOfWeek || []).filter(d => d !== day);
+                    setForm({...form, dayOfWeek: newDays});
+                  }}
+                />
+                <span className="text-sm">{dayLabels[day]}</span>
+              </label>
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={() => setForm({...form, dayOfWeek: allDays})}
+            className="mt-2 text-sm text-blue-600 hover:underline"
+          >
+            Ежедневно
+          </button>
+        </div>
+
         <label className="flex items-center gap-2 mb-4">
           <input
             type="checkbox"
@@ -101,6 +153,7 @@ export function Shows() {
           />
           <span>Сейчас в эфире (LIVE)</span>
         </label>
+
         <div className="flex gap-2">
           <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
             {editingId ? 'Сохранить' : 'Добавить'}
@@ -122,6 +175,7 @@ export function Shows() {
               <th className="text-left p-4">Ведущий</th>
               <th className="text-left p-4">Время</th>
               <th className="text-left p-4">Категория</th>
+              <th className="text-left p-4">Дни</th>
               <th className="text-left p-4">Статус</th>
               <th className="text-left p-4">Действия</th>
             </tr>
@@ -138,8 +192,21 @@ export function Shows() {
                   </span>
                 </td>
                 <td className="p-4">
+                  <div className="flex gap-1">
+                    {show.dayOfWeek?.length > 0 ? (
+                      show.dayOfWeek.map((d: string) => (
+                        <span key={d} className="text-xs bg-gray-100 px-1 py-0.5 rounded">
+                          {dayLabels[d]}
+                        </span>
+                      ))
+                    ) : (
+                      <span className="text-xs text-gray-400">—</span>
+                    )}
+                  </div>
+                </td>
+                <td className="p-4">
                   {show.isLive ? (
-                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm flex items-center gap-1">
+                    <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-sm flex items-center gap-1 w-fit">
                       <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                       LIVE
                     </span>
