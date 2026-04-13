@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { settingsApi } from '../api/client';
-import { Save, Globe, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube, Radio } from 'lucide-react';
+import { Save, Globe, Mail, Phone, MapPin, MessageCircle, Instagram, Twitter, Youtube, Radio } from 'lucide-react';
 
 export function Settings() {
   const [settings, setSettings] = useState({
@@ -197,7 +197,7 @@ export function Settings() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Facebook className="w-4 h-4 inline mr-1 text-blue-600" /> Facebook
+                <MessageCircle className="w-4 h-4 inline mr-1 text-blue-600" /> Facebook / VK
               </label>
               <input
                 type="text"
